@@ -1,15 +1,18 @@
 # KDM Equipment Rental
 
-KDM 공용 장비 대여 사이트 **1단계 UI 초안**입니다. Next.js App Router, TypeScript, Tailwind CSS 4를 사용합니다.
+KDM 공용 장비 대여 사이트 **비회원 대여 UI 초안**입니다. Next.js App Router, TypeScript, Tailwind CSS 4를 사용합니다.
 
 ## 현재 가능한 것
 
 - 19대 장비 목록, 한국어 UI, PC/모바일 반응형 디자인
-- 장비명/관리 번호 검색, 카테고리 필터, 대여 가능 필터, 정렬
-- 장비 정보 모달, 이용 안내/FAQ, 내 대여 현황 예시, 로그인/회원가입 화면 이동
+- 장비명/관리 번호 검색, 카테고리 필터, 대여 가능 필터
+- 장비 클릭 → 달력으로 기간 선택 → 이름/기수 입력 → 신청 내용 미리보기
+- 이름과 기수는 빈칸으로 시작합니다. 사용 목적은 선택 사항입니다.
+- 월 이동, 기간 표시, 과거 날짜/점검 장비/예시 대여 중 기간 제한
+- 이용 안내/FAQ, 이전 로그인 URL은 홈으로 이동
 - 키보드 조작, 검색 결과 없음 안내, 모달 Escape 닫기
 
-**실제 인증·대여 신청·승인·QR 스캔·데이터 저장은 연결하지 않았습니다.** 로그인 입력란은 비활성화되어 있습니다. 대여 상태와 반납일, 모델/사진, 마이페이지 내역은 예시입니다. 관리자 사이트는 포함하지 않습니다.
+**로그인/회원가입은 제거했습니다. 실제 접수·승인·QR 스캔·데이터 저장은 아직 연결하지 않았습니다.** 입력한 이름과 기수는 화면 메모리에만 존재하며 서버/브라우저 저장소로 전송·저장하지 않습니다. 창을 닫으면 사라집니다. 대여 상태와 반납일, 모델/사진은 예시입니다. 관리자 사이트는 포함하지 않습니다.
 
 ## 처음 실행하기
 
@@ -34,6 +37,7 @@ ZIP으로 받았다면 터미널에서 `package.json`이 있는 `KDM+` 폴더로
 
 ```bash
 npm run typecheck
+node --test tests/rental-dates.cjs
 npm run build
 ```
 
@@ -57,8 +61,10 @@ npm run build
 
 ## 파일 안내
 
-- `src/app/`: 홈, 이용 안내, 내 대여 현황, 로그인 경로
+- `src/app/`: 홈, 이용 안내, 조회 준비 안내, 기존 로그인 URL 호환
 - `src/components/rental-site.tsx`: UI 및 로컬 검색/필터
+- `src/components/booking-dialog.tsx`: 달력/비회원 신청 미리보기
+- `src/lib/rental-dates.ts`: 한국 시간 날짜 계산 및 입력 검증
 - `src/lib/equipment.ts`: 장비 타입, 조회 함수, 예시 데이터
 - `src/app/globals.css`: Tailwind 진입점 및 반응형 디자인
 - `public/images/`: 로컬 예시 사진 (실제 장비 사진으로 교체 예정)
@@ -68,9 +74,11 @@ npm run build
 
 ## 다음 단계
 
-2. 상세페이지, 대여 신청 양식, 마이페이지 실제 흐름
-3. Supabase Auth/PostgreSQL/RLS와 서버 검증
+2. 비회원 신청 접수, 신청번호/본인 확인 수단, 조회 흐름 확정
+3. Supabase PostgreSQL/RLS와 서버 검증 (관리자 인증은 별도)
 4. 카메라 QR 스캔 및 구성품/실제 대여 건 검증
 5. 모바일 실기기 테스트 및 운영 배포
 
-3단계에서 Supabase 프로젝트를 연결하기 전에는 계정이나 대여 데이터를 실제로 저장하지 않습니다.
+3단계에서 Supabase 프로젝트를 연결하기 전에는 대여 데이터를 실제로 저장하지 않습니다. 이름/기수만으로 다른 사람의 내역을 조회하게 구현하지 마세요.
+
+디자인: [Anthropic frontend-design](https://github.com/anthropics/skills/blob/main/skills/frontend-design/SKILL.md) 지침 적용. [설계 의도](docs/design.md). Pretendard 글꼴은 로컬 제공하며 `public/fonts/LICENSE.txt`에 OFL 라이선스가 포함됩니다.

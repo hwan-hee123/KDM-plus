@@ -1,2 +1,3 @@
-import RentalSite from '@/components/rental-site';
-export default function Page() { return <RentalSite page="login" />; }
+import {redirect} from 'next/navigation';
+// Keep old bookmarks usable without retaining a login screen.
+export default function Page(){redirect('/');}
